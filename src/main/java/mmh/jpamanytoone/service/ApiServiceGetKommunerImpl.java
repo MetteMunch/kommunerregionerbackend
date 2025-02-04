@@ -1,7 +1,11 @@
 package mmh.jpamanytoone.service;
 
+import mmh.jpamanytoone.model.Kommune;
 import mmh.jpamanytoone.model.Region;
 import mmh.jpamanytoone.repository.KommuneRepository;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +26,22 @@ public class ApiServiceGetKommunerImpl implements ApiServiceGetRegioner{
         this.kommuneRepository = kommuneRepository;
     }
 
+    public void saveKommuner(List<Kommune> kommuner) {
+        for(Kommune k:kommuner) {
+            kommuneRepository.save(k);
+        }
+    }
+
     @Override
-    public List<Region> getRegioner() {
-        return List.of();
+    public List<Kommune> getKommuner() {
+        ResponseEntity<List<Kommune>> kommuneResponse =
+                restTemplate.exchange(kommuneUrl,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<Kommune>>() {
+                        });
+        List<Kommune> kommuner = kommuneResponse.getBody();
+        saveKommuner(kommuner);
+        return kommuner;
     }
 }

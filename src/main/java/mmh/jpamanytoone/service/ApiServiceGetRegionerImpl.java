@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner{
+public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner {
 
     private RestTemplate restTemplate;
     //Vi skal bruge repository til at gemme regionerne i vores egen database
@@ -23,11 +23,11 @@ public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner{
 
     public ApiServiceGetRegionerImpl(RestTemplate restTemplate, RegionRepository regionRepository) {
         this.restTemplate = restTemplate;
-        this. regionRepository = regionRepository;
+        this.regionRepository = regionRepository;
     }
 
     public void saveRegioner(List<Region> regioner) {
-        for(Region r: regioner) {
+        for (Region r : regioner) {
             regionRepository.save(r);
         }
         //eller Lambda regioner.forEach(reg -> regionRepository.save(reg));
@@ -35,12 +35,12 @@ public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner{
 
     @Override
     public List<Region> getRegioner() {
-        List<Region> lst = new ArrayList<>();
         ResponseEntity<List<Region>> regionResponse =
                 restTemplate.exchange(regionUrl,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<Region>>(){ });
+                        new ParameterizedTypeReference<List<Region>>() {
+                        });
         List<Region> regioner = regionResponse.getBody();
         saveRegioner(regioner);
         return regioner;
