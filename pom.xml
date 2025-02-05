@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>mmh</groupId>
-    <artifactId>JPAManyToOne</artifactId>
+    <artifactId>RegionerKommunerEksternApi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>JPAManyToOne</name>
     <description>JPAManyToOne</description>

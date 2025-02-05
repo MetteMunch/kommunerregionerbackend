@@ -16,8 +16,9 @@ public class Region {
     private String navn;
     private String href;
 
-    //Nedenstående er egentligt ikke nødvendigt at have som attribut og kan være lidt farlig
-    //hvis man har mange data (fx kunde der har rigtig mange ordre...)
+    //Nedenstående attribut er egentligt ikke nødvendig og kan være lidt farlig ressourcemæssigt
+    //hvis man har mange data (fx kunde der har rigtig mange ordre, da alt indlæses... Men her gør
+    // det nemt fx at kalde alle kommuner der hører under en region)
 
     @OneToMany(mappedBy = "region")
     @JsonBackReference

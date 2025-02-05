@@ -12,7 +12,8 @@ public class Kommune {
     private String href;
 
     @ManyToOne
-    @JoinColumn(name = "regionfk",referencedColumnName = "kode") //nullable = false
+    @JoinColumn(name = "regionfk",referencedColumnName = "kode", nullable = false) //nullable = false skal indsættes,
+    // hvis vi vil sikre, at en kommune ikke kan gemmes medmindre der er tilknyttet en Region
     private Region region;
 
     public Kommune() {

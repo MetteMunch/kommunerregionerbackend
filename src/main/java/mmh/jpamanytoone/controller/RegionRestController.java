@@ -4,10 +4,12 @@ import mmh.jpamanytoone.model.Kommune;
 import mmh.jpamanytoone.model.Region;
 import mmh.jpamanytoone.repository.RegionRepository;
 import mmh.jpamanytoone.service.ApiServiceGetRegioner;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -58,14 +60,20 @@ public class RegionRestController {
 
     }
 
+
+
     @DeleteMapping("/regioner/{kode}")
     public ResponseEntity<String> deleteRegion(@PathVariable String kode) {
         Optional<Region> orgRegion = regionRepository.findById(kode);
         if(orgRegion.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Region not found");
         }
-        regionRepository.deleteById(kode);
-        return ResponseEntity.ok("Region deleted");
+        try {
+            regionRepository.deleteById(kode);
+            return ResponseEntity.ok("Region deleted");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Parent cannot be deleted");
+        }
     }
 
 
