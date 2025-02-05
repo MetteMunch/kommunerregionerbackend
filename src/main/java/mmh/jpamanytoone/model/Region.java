@@ -16,6 +16,9 @@ public class Region {
     private String navn;
     private String href;
 
+    //Nedenstående er egentligt ikke nødvendigt at have som attribut og kan være lidt farlig
+    //hvis man har mange data (fx kunde der har rigtig mange ordre...)
+
     @OneToMany(mappedBy = "region")
     @JsonBackReference
     private Set<Kommune> kommuner = new HashSet<>();

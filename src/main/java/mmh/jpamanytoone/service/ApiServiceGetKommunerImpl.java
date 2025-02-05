@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-public class ApiServiceGetKommunerImpl implements ApiServiceGetRegioner{
+public class ApiServiceGetKommunerImpl implements ApiServiceGetKommuner{
 
     private RestTemplate restTemplate;
     //Vi skal bruge repository til at gemme kommunerne i vores database
@@ -29,6 +29,7 @@ public class ApiServiceGetKommunerImpl implements ApiServiceGetRegioner{
     public void saveKommuner(List<Kommune> kommuner) {
         for(Kommune k:kommuner) {
             kommuneRepository.save(k);
+            //kommuneRepository.saveAll(kommuner);   Kan også skrives på denne måde
         }
     }
 

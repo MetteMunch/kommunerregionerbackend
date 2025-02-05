@@ -40,6 +40,7 @@ public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner {
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<Region>>() {
+                    //new Para... viser at den skal tage JSON og lave om til Array med Regioner
                         });
         List<Region> regioner = regionResponse.getBody();
         saveRegioner(regioner);
