@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*") //Denne annotation er for at kunne arbejde med ekstern frontEnd
 public class RegionRestController {
 
     private ApiServiceGetRegioner apiServiceGetRegioner;
@@ -75,6 +76,22 @@ public class RegionRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Parent cannot be deleted");
         }
     }
+
+    //___ træning med forms i projekt JsRegionerForm
+
+    @PostMapping("/region")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Region postRegion(@RequestBody Region region) {
+        System.out.println(region);
+        return regionRepository.save(region);
+    }
+
+    @PostMapping("/region2")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<String> postRegion2(@RequestParam String kode, @RequestParam String navn, @RequestParam String href) {
+        return ResponseEntity.ok("Received kode: " + kode + ", navn: " + navn);
+    }
+
 
 
 }
