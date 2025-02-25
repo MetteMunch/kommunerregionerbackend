@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*") //Denne annotation er for at kunne arbejde med ekstern frontEnd
 public class KommuneRestController {
 
     private ApiServiceGetKommuner apiServiceGetKommuner;
