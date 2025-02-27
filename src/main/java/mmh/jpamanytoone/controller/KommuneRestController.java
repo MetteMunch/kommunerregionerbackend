@@ -6,6 +6,7 @@ import mmh.jpamanytoone.service.ApiServiceGetKommuner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,24 +24,37 @@ public class KommuneRestController {
         this.kommuneRepository = kommuneRepository;
     }
 
-    //---------------
+    //--------- data fra API ------------
 
     @GetMapping("/getfromapikommuner")
     public List<Kommune> getKommuner() {
         return apiServiceGetKommuner.getKommuner();
     }
 
-    //------ data fra API ------------
+    //------
 
     @GetMapping("/kommuner")
     public List<Kommune> showAllKommuner() {
         return kommuneRepository.findAll();
     }
 
+//    @PostMapping("/kommuner")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Kommune saveKommune(@RequestBody Kommune kommune) {
+//        return kommuneRepository.save(kommune);
+//    }
+
     @PostMapping("/kommuner")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Kommune saveKommune(@RequestBody Kommune kommune) {
-        return kommuneRepository.save(kommune);
+    public ResponseEntity<Kommune> saveKommune(@RequestBody Kommune kommune) {
+        try {
+            Kommune savedKommune = kommuneRepository.save(kommune);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedKommune);
+            //Hvis save går godt får klienten ok tilbage sammen med den gemte kommune objekt
+
+        } catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Kunne ikke oprette kommune", e);
+        }
+
     }
 
     @GetMapping("/kommuner/{kode}")
@@ -56,8 +70,24 @@ public class KommuneRestController {
 
     }
 
+    @PutMapping("kommuner/{kode}")
+    public ResponseEntity<Kommune> updateKommune(@PathVariable String kode, @RequestBody Kommune kommuneDetails) {
+        Kommune kommuneToBeChanged = kommuneRepository.findById(kode).orElse(null);
+
+        if(kommuneToBeChanged == null) {
+            return ResponseEntity.notFound().build(); // Returnerer 404 hvis ikke fundet
+        }
+
+        kommuneToBeChanged.setNavn(kommuneDetails.getNavn());
+        kommuneToBeChanged.setHref(kommuneDetails.getHref());
+        kommuneToBeChanged.setRegion(kommuneDetails.getRegion());
+        Kommune updatedKommune = kommuneRepository.save(kommuneToBeChanged);
+
+        return ResponseEntity.ok(updatedKommune);
+    }
+
     @DeleteMapping("/kommuner/{kode}")
-    public ResponseEntity<String> deleteRegion(@PathVariable String kode) {
+    public ResponseEntity<String> deleteKommune(@PathVariable String kode) {
         Optional<Kommune> orgKommune = kommuneRepository.findById(kode);
         if(orgKommune.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kommune not found");
