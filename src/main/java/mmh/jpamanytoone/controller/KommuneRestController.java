@@ -51,7 +51,7 @@ public class KommuneRestController {
             return ResponseEntity.status(HttpStatus.CREATED).body(savedKommune);
             //Hvis save går godt får klienten ok tilbage sammen med den gemte kommune objekt
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Kunne ikke oprette kommune", e);
         }
 
@@ -74,7 +74,7 @@ public class KommuneRestController {
     public ResponseEntity<Kommune> updateKommune(@PathVariable String kode, @RequestBody Kommune kommuneDetails) {
         Kommune kommuneToBeChanged = kommuneRepository.findById(kode).orElse(null);
 
-        if(kommuneToBeChanged == null) {
+        if (kommuneToBeChanged == null) {
             return ResponseEntity.notFound().build(); // Returnerer 404 hvis ikke fundet
         }
 
@@ -89,16 +89,12 @@ public class KommuneRestController {
     @DeleteMapping("/kommuner/{kode}")
     public ResponseEntity<String> deleteKommune(@PathVariable String kode) {
         Optional<Kommune> orgKommune = kommuneRepository.findById(kode);
-        if(orgKommune.isEmpty()) {
+        if (orgKommune.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kommune not found");
         }
         kommuneRepository.deleteById(kode);
         return ResponseEntity.ok("Kommune deleted");
     }
-
-
-
-
 
 
 }
